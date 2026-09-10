@@ -3,259 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>outlet Ateliê Giselle Sousa</title>
+    <title>Outlet Ateliê Giselle Sousa</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
+
+    <!-- HEADER -->
     <header class="header">
-        <div class="header-container">
+        <div class="header-content">
             <h1 class="logo">outlet Ateliê Giselle Sousa</h1>
-            <nav class="nav-menu">
-                <a href="#vestidos" onclick="showSection('vestidos')">Vestidos</a>
-                <a href="#tecidos" onclick="showSection('tecidos')">Tecidos</a>
+            <nav class="nav-links">
+                <a href="#vestidos">Vestidos</a>
+                <a href="#tecidos">Tecidos</a>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-container">
-        <!-- Vestidos Section -->
-        <section id="section-vestidos" class="product-section">
-            <h2 class="section-title">Vestidos em Destaque</h2>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container">
+        
+        <!-- SEÇÃO VESTIDOS -->
+        <section id="vestidos" class="catalog-section">
+            <h2 class="section-title">👗 Vestidos em Destaque</h2>
             <div id="vestidos-grid" class="products-grid">
-                <!-- Inserido dinamicamente via JS -->
+                <!-- Produtos renderizados via JS -->
             </div>
         </section>
 
-        <!-- Tecidos Section -->
-        <section id="section-tecidos" class="product-section">
-            <h2 class="section-title">Tecidos Exclusivos</h2>
+        <!-- SEÇÃO TECIDOS -->
+        <section id="tecidos" class="catalog-section">
+            <h2 class="section-title">🧵 Tecidos Exclusivos</h2>
             <div id="tecidos-grid" class="products-grid">
-                <!-- Inserido dinamicamente via JS -->
+                <!-- Produtos renderizados via JS -->
             </div>
         </section>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Feito com muito amor do seu jeitinho ❤️❤️ • <a href="#admin" onclick="openAdmin()" style="color: inherit; text-decoration: underline; cursor: pointer;">Painel Admin</a></p>
-    </footer>
-
-    <!-- Buy Modal -->
-    <div id="buy-modal" class="modal">
+    <!-- MODAL DE COMPRA / FINALIZAR COMPRA -->
+    <div id="checkout-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeBuyModal()">&times;</span>
             <div class="modal-header">
-                <h3>Finalizar Compra</h3>
+                <h2>Finalizar Compra</h2>
+                <button class="close-modal" id="closeCheckoutModal">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="modal-product-info">
-                    <img id="modal-product-img" src="" alt="Produto" class="modal-img">
-                    <div>
-                        <h4 id="modal-product-title"></h4>
-                        <p id="modal-product-price" class="modal-price"></p>
-                    </div>
-                </div>
+                <img id="checkout-img" src="" alt="Produto" class="modal-img">
+                <h3 id="checkout-title" class="modal-title"></h3>
+                <p id="checkout-price" class="modal-price"></p>
                 <p class="modal-instruction">Você será redirecionado para o WhatsApp para combinar os detalhes do pagamento e entrega diretamente conosco.</p>
-                <button id="modal-whatsapp-btn" class="btn btn-whatsapp btn-large">
-                    <i class="fab fa-whatsapp"></i> Continuar no WhatsApp
-                </button>
+                <a id="whatsapp-link" href="#" target="_blank" class="btn btn-whatsapp btn-large">
+                    <i class="fab class-whatsapp"></i> Continuar no WhatsApp
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Description & Gallery Modal -->
-    <div id="desc-modal" class="modal">
-        <div class="modal-content" style="max-width: 650px;">
-            <span class="close-modal" onclick="closeDescModal()">&times;</span>
+    <!-- MODAL DE DESCRIÇÃO -->
+    <div id="description-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Descrição / Medidas</h2>
+                <button class="close-modal" id="closeDescModal">&times;</button>
+            </div>
             <div class="modal-body">
-                <div style="text-align: center; margin-bottom: 1rem; position: relative;">
-                    <img id="desc-modal-img" src="" alt="Produto" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px;">
-                </div>
-
-                <div style="margin-bottom: 1rem; text-align: center;">
-                    <button id="more-photos-btn" class="btn btn-secondary" onclick="toggleGalleryView()" style="display: none; margin: 0 auto; font-size: 0.9rem;">
-                        <i class="fas fa-images"></i> Ver mais fotos deste produto
-                    </button>
-                </div>
-
-                <div id="gallery-expanded-container" style="display: none; margin-bottom: 1.5rem; background: #f9f9f9; padding: 10px; border-radius: 8px;">
-                    <h5 style="margin-bottom: 8px; color: #555;">Galeria de Fotos (Clique na foto para ampliar):</h5>
-                    <div id="gallery-thumbs-list" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px;">
-                        <!-- Thumbs inseridos via JS -->
-                    </div>
-                </div>
-
-                <h3 id="desc-modal-title" style="color: #2C1810; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; font-size: 1.5rem;"></h3>
-                <p id="desc-modal-price" style="font-weight: 600; color: #8B263E; font-size: 1.25rem; margin-bottom: 1rem;"></p>
-                
-                <div style="background: #fdfbfb; padding: 1rem; border-radius: 8px; border: 1px solid #eee; margin-bottom: 1.5rem;">
-                    <h4 style="margin-bottom: 0.5rem; color: #444; font-size: 0.95rem;">Descrição / Medidas:</h4>
-                    <p id="desc-modal-text" style="white-space: pre-line; color: #555; font-size: 0.95rem; line-height: 1.6;"></p>
-                </div>
-
-                <button id="desc-modal-buy-btn" class="btn btn-whatsapp btn-large" style="width: 100%;">
-                    <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
-                </button>
+                <img id="desc-img" src="" alt="Produto" class="modal-img">
+                <h3 id="desc-title" class="modal-title"></h3>
+                <p id="desc-price" class="modal-price"></p>
+                <p id="desc-text" class="modal-text"></p>
+                <button id="desc-buy-btn" class="btn btn-whatsapp btn-large">Comprar pelo WhatsApp</button>
             </div>
         </div>
     </div>
 
-    <!-- Zoom Modal -->
-    <div id="image-zoom-modal" class="modal" style="display: none; z-index: 10000; background: rgba(0,0,0,0.9); justify-content: center; align-items: center;">
-        <span class="close-modal" onclick="closeZoomModal()" style="position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer;">&times;</span>
-        <img id="zoomed-image" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
-    </div>
-
-    <!-- Admin Panel Drawer -->
-    <div id="admin-panel" class="admin-panel">
+    <!-- PAINEL ADMIN LATERAL -->
+    <aside id="admin-panel" class="admin-panel">
         <div class="admin-header">
             <h2>Painel Administrativo</h2>
-            <button class="close-admin" onclick="closeAdmin()">&times;</button>
+            <button id="closeAdminBtn" class="close-admin">&times;</button>
         </div>
-
         <div class="admin-content">
-            <!-- Login State -->
-            <div id="admin-login" class="admin-login-box">
-                <i class="fas fa-lock login-icon"></i>
-                <h3>Acesso Restrito</h3>
-                <p>Digite seu e-mail e senha cadastrados para gerenciar o catálogo.</p>
-                <div class="form-group">
-                    <input type="email" id="admin-email" placeholder="E-mail" style="width: 100%; margin-bottom: 0.5rem; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px;">
-                    <input type="password" id="admin-password" placeholder="Senha" style="width: 100%; margin-bottom: 0.5rem; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px;">
-                </div>
-                <button class="btn btn-primary" onclick="loginAdmin()">Entrar no Painel</button>
+            <!-- Conteúdo do Admin -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="add-product">Adicionar Produto</button>
+                <button class="admin-tab" data-tab="manage-products">Gerenciar Produtos</button>
             </div>
 
-            <!-- Dashboard State -->
-            <div id="admin-dashboard" class="hidden">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee;">
-                    <span id="user-display" style="font-size: 0.85rem; color: #666; font-weight: 500;"></span>
-                    <button class="btn btn-small btn-secondary" onclick="logoutAdmin()">Sair</button>
-                </div>
-
-                <div class="admin-tabs">
-                    <button class="admin-tab active" onclick="switchTab('add', event)">Adicionar Produto</button>
-                    <button class="admin-tab" onclick="switchTab('list', event)">Gerenciar Produtos</button>
-                    <button class="admin-tab" onclick="switchTab('config', event)">Configurações</button>
-                </div>
-
-                <!-- Tab Add Product -->
-                <div id="tab-add" class="tab-content active">
-                    <form id="add-product-form" onsubmit="event.preventDefault(); addProduct();">
-                        <div class="form-group">
-                            <label>Tipo de Produto</label>
-                            <select id="product-type">
-                                <option value="vestido">Vestido</option>
-                                <option value="tecido">Tecido</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Nome do Produto</label>
-                            <input type="text" id="product-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Preço (R$)</label>
-                            <input type="number" id="product-price" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Fotos do Produto (A 1ª foto será a foto principal)</label>
-                            <input type="file" id="product-image-file" multiple accept=".png, .jpg, .jpeg, .jfif, .webp, image/*">
-                            <small style="color: #666; display: block; margin-top: 4px;">Ao escolher o arquivo, o link será gerado automaticamente no campo abaixo.</small>
-                        </div>
-                        <div id="product-gallery-preview" class="image-preview-container"></div>
-                        <div class="form-group">
-                            <label>Ou cole links das fotos (um link por linha):</label>
-                            <textarea id="product-image-links" rows="3" placeholder="https://i.ibb.co/foto1.jpg"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Descrição</label>
-                            <textarea id="product-desc" rows="4" placeholder="Descreva o produto, medidas e tamanhos disponíveis..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-large">Salvar Produto</button>
-                    </form>
-                </div>
-
-                <!-- Tab List Products -->
-                <div id="tab-list" class="tab-content">
-                    <div id="admin-products-list" class="admin-products-list">
-                        <!-- Lista gerada via JS -->
-                    </div>
-                </div>
-
-                <!-- Tab Config -->
-                <div id="tab-config" class="tab-content">
-                    <form id="config-form" onsubmit="event.preventDefault(); saveConfig();">
-                        <div class="form-group">
-                            <label>Número do WhatsApp (com DDD)</label>
-                            <input type="text" id="whatsapp-number" placeholder="11999999999" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Mensagem Padrão do WhatsApp</label>
-                            <textarea id="whatsapp-message" rows="3" required></textarea>
-                            <small class="form-help">Use {produto} para o nome e {preco} para o valor.</small>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-large">Salvar Configurações</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Product Modal -->
-    <div id="edit-modal" class="modal">
-        <div class="modal-content" style="max-width: 550px;">
-            <span class="close-modal" onclick="closeEditModal()">&times;</span>
-            <div class="modal-header">
-                <h3>Editar Produto</h3>
-            </div>
-            <div class="modal-body">
-                <form id="edit-product-form" onsubmit="event.preventDefault(); saveEditProduct();">
-                    <input type="hidden" id="edit-product-id">
+            <div id="add-product" class="tab-content active">
+                <form id="product-form">
                     <div class="form-group">
                         <label>Tipo de Produto</label>
-                        <select id="edit-product-type">
+                        <select id="prod-type">
                             <option value="vestido">Vestido</option>
                             <option value="tecido">Tecido</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Nome do Produto</label>
-                        <input type="text" id="edit-product-name" required>
+                        <input type="text" id="prod-name" required>
                     </div>
                     <div class="form-group">
                         <label>Preço (R$)</label>
-                        <input type="number" id="edit-product-price" step="0.01" required>
+                        <input type="number" step="0.01" id="prod-price" required>
                     </div>
                     <div class="form-group">
-                        <label>Fotos do Produto (A 1ª foto será a foto principal)</label>
-                        <input type="file" id="edit-product-image-file" multiple accept=".png, .jpg, .jpeg, .jfif, .webp, image/*">
+                        <label>Fotos do Produto</label>
+                        <input type="file" id="prod-file" multiple accept="image/*">
                     </div>
-                    <div id="edit-product-gallery-preview" class="image-preview-container"></div>
                     <div class="form-group">
-                        <label>Ou cole links das fotos (um link por linha):</label>
-                        <textarea id="edit-product-image-links" rows="3" placeholder="https://i.ibb.co/foto1.jpg"></textarea>
+                        <label>Ou cole links das fotos (um por linha):</label>
+                        <textarea id="prod-links" rows="3"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Descrição</label>
-                        <textarea id="edit-product-desc" rows="4"></textarea>
+                        <textarea id="prod-desc" rows="4"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-large">Salvar Alterações</button>
+                    <button type="submit" class="btn btn-primary">Salvar Produto</button>
                 </form>
             </div>
-        </div>
-    </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+            <div id="manage-products" class="tab-content">
+                <div id="admin-product-list">
+                    <!-- Lista de produtos para gerenciar -->
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <p>Feito com muito amor do seu jeitinho ❤️❤️ • <button id="openAdminBtn" class="btn-admin-mini">🔒 Painel Admin</button></p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
