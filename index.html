@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Ateliê Giselle Sousa</title>
+
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lavishly+Yours&family=Sarina&display=swap" rel="stylesheet">
+
+    <!-- Biblioteca de Ícones (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS da sua loja -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER / NAVEGAÇÃO -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">outlet Ateliê Giselle Sousa</div>
+            
+            <nav class="nav-links">
+                <a href="javascript:void(0)" onclick="showSection('vestidos')">Vestidos</a>
+                <a href="javascript:void(0)" onclick="showSection('tecidos')">Tecidos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container">
+
+        <!-- SEÇÃO VESTIDOS -->
+        <section id="section-vestidos" class="catalog-section">
+            <h2 class="section-title"><i class="fas fa-female"></i> Coleção de Vestidos</h2>
+            <div id="vestidos-grid" class="products-grid">
+                <!-- Cards renderizados dinamicamente via JS -->
+            </div>
+        </section>
+
+        <!-- SEÇÃO TECIDOS -->
+        <section id="section-tecidos" class="catalog-section">
+            <h2 class="section-title"><i class="fas fa-scroll"></i> Nossos Tecidos</h2>
+            <div id="tecidos-grid" class="products-grid">
+                <!-- Cards renderizados dinamicamente via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RODAPÉ DA PÁGINA -->
+    <footer class="footer">
+        <p>© 2026 Tecidos & Vestidos. Todos os direitos reservados.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Feito com muito amor do seu jeitinho❤️❤️
+            <span onclick="openAdmin()" style="cursor: pointer; opacity: 0.3; font-weight: bold; padding: 0 5px;" title="Área Restrita Admin">•</span>
+        </p>
+    </footer>
+
+    <!-- MODAL DO PAINEL ADMIN -->
+    <div id="admin-panel" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-shield"></i> Painel Administrativo</h3>
+                <button class="close-btn" onclick="closeAdmin()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- LOGIN ADMIN -->
+                <div id="admin-login">
+                    <p style="margin-bottom: 1rem; color: var(--gray);">Digite a senha de acesso para gerenciar a loja:</p>
+                    <div class="form-group">
+                        <input type="password" id="admin-password" placeholder="Senha de acesso" onkeypress="if(event.key === 'Enter') loginAdmin()">
+                    </div>
+                    <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%; justify-content: center;">Entrar</button>
+                </div>
+
+                <!-- DASHBOARD ADMIN -->
+                <div id="admin-dashboard" class="hidden">
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="switchTab('add', event)">Adicionar Produto</button>
+                        <button class="admin-tab" onclick="switchTab('list', event)">Gerenciar Produtos</button>
+                        <button class="admin-tab" onclick="switchTab('config', event)">Configurações</button>
+                    </div>
+
+                    <!-- TAB 1: ADICIONAR PRODUTO -->
+                    <div id="tab-add" class="tab-content active">
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="product-type">
+                                <option value="vestido">Vestido</option>
+                                <option value="tecido">Tecido</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nome do Produto</label>
+                            <input type="text" id="product-name" placeholder="Ex: Vestido de Festa Elegante">
+                        </div>
+                        <div class="form-group">
+                            <label>Preço (R$)</label>
+                            <input type="number" id="product-price" step="0.01" placeholder="Ex: 299.90">
+                        </div>
+
+                        <!-- CAMPO DE FOTOS UNIFICADO -->
+                        <div class="form-group">
+                            <label>Fotos do Produto (A 1ª foto será a foto principal)</label>
+                            <input type="file" id="product-image-file" accept="image/*" multiple class="form-control">
+                            <small style="color: #666; display: block; margin-top: 4px;">
+                                Você pode selecionar várias fotos de uma vez segurando a tecla Ctrl ou escolhendo na galeria do celular.
+                            </small>
+                            
+                            <label style="margin-top: 10px; display: block;">Ou cole links das fotos (um link por linha):</label>
+                            <textarea id="product-image-links" class="form-control" rows="3" placeholder="https://link1.com/foto1.jpg&#10;https://link2.com/foto2.jpg"></textarea>
+                            
+                            <!-- Pré-visualização da galeria -->
+                            <div id="product-gallery-preview" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;"></div>
+                        </div>
+                                                    
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea id="product-desc" rows="3" placeholder="Detalhes do produto..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="addProduct()" style="width: 100%; justify-content: center;">Salvar Produto</button>
+                    </div>
+
+                    <!-- TAB 2: GERENCIAR PRODUTOS -->
+                    <div id="tab-list" class="tab-content">
+                        <div id="admin-products-list">
+                            <!-- Lista renderizada via JS -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: CONFIGURAÇÕES -->
+                    <div id="tab-config" class="tab-content">
+                        <div class="form-group">
+                            <label>Número do WhatsApp (DDD + Número)</label>
+                            <input type="text" id="whatsapp-number" placeholder="Ex: 11999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Mensagem Padrão</label>
+                            <textarea id="whatsapp-message" rows="3"></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveConfig()" style="width: 100%; justify-content: center;">Salvar Configurações</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDIÇÃO DE PRODUTO -->
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            <h3 class="modal-title" style="margin-bottom: 1rem;">Editar Produto</h3>
+            
+            <input type="hidden" id="edit-product-id">
+            
+            <div style="text-align: left; display: flex; flex-direction: column; gap: 0.8rem;">
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 600;">Tipo:</label>
+                    <select id="edit-product-type" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc;">
+                        <option value="vestido">Vestido</option>
+                        <option value="tecido">Tecido</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 600;">Nome:</label>
+                    <input type="text" id="edit-product-name" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc;">
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 600;">Preço (R$):</label>
+                    <input type="number" step="0.01" id="edit-product-price" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc;">
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 600;">Fotos do Produto:</label>
+                    <input type="file" id="edit-product-image-file" accept="image/*" multiple style="width: 100%;">
+                    <div id="edit-product-gallery-preview" style="margin-top: 0.4rem; display: flex; gap: 8px; flex-wrap: wrap;"></div>
+                    
+                    <label style="font-size: 0.8rem; font-weight: 500; color: var(--gray); display: block; margin-top: 0.4rem;">Ou links adicionais (um por linha):</label>
+                    <textarea id="edit-product-image-links" rows="2" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc; resize: vertical;"></textarea>
+                </div>
+                <div>
+                    <label style="font-size: 0.85rem; font-weight: 600;">Descrição:</label>
+                    <textarea id="edit-product-desc" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <button onclick="saveEditProduct()" class="btn btn-primary" style="width: 100%; margin-top: 1.2rem; justify-content: center;">
+                Salvar Alterações
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE DESCRIÇÃO COM GALERIA DE FOTOS -->
+    <div id="desc-modal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 600px; text-align: left; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto;">
+            <button class="modal-close" onclick="closeDescModal()">&times;</button>
+            
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1rem; position: relative;">
+                <div style="position: relative;">
+                    <img id="desc-modal-img" src="" alt="Produto" style="max-height: 220px; max-width: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #eee;">
+                </div>
+
+                <div id="more-photos-btn" onclick="toggleGalleryView()" style="display: none; width: 90px; height: 120px; background: rgba(200, 200, 200, 0.45); backdrop-filter: blur(4px); border: 2px dashed #999; border-radius: 10px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s ease;">
+                    <span style="font-size: 2rem; font-weight: bold; color: #444; letter-spacing: 2px; line-height: 1;">...</span>
+                    <span style="font-size: 0.75rem; color: #555; margin-top: 4px; font-weight: 600;">Mais fotos</span>
+                </div>
+            </div>
+
+            <div id="gallery-expanded-container" style="display: none; background: #f0f0f0; padding: 10px; border-radius: 8px; margin-bottom: 1rem;">
+                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #555; font-weight: bold;"><i class="fas fa-images"></i> Galeria de Fotos do Produto:</p>
+                <div id="gallery-thumbs-list" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;"></div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 0.8rem;">
+                <h3 id="desc-modal-title" class="modal-title" style="font-size: 1.3rem; margin-bottom: 4px;"></h3>
+                <p id="desc-modal-price" class="modal-price" style="font-size: 1.2rem; color: #8B263E; font-weight: bold; margin: 0;"></p>
+            </div>
+            
+            <h4 style="border-bottom: 2px solid #eee; padding-bottom: 0.4rem; margin-bottom: 0.8rem; color: #333;">
+                <i class="fas fa-align-left"></i> Descrição & Medidas
+            </h4>
+            
+            <div id="desc-modal-text" style="overflow-y: auto; max-height: 200px; font-size: 0.95rem; line-height: 1.6; color: #444; background: #f9f9f9; padding: 1rem; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;"></div>
+
+            <div style="margin-top: 1.2rem; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeDescModal()">Fechar</button>
+                <button id="desc-modal-buy-btn" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i> Comprar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE COMPRA -->
+    <div id="buy-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeBuyModal()">&times;</button>
+            <img id="modal-product-img" alt="Produto" class="modal-img">
+            <h3 id="modal-product-title" class="modal-title"></h3>
+            <p id="modal-product-price" class="modal-price"></p>
+            <p class="modal-text">Clique no botão abaixo para falar conosco no WhatsApp e finalizar sua compra</p>
+            <button id="modal-whatsapp-btn" class="btn btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Comprar
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE ZOOM DE IMAGEM -->
+    <div id="image-zoom-modal" class="modal-overlay" style="z-index: 2000; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center;" onclick="closeZoomModal()">
+        <span style="position: absolute; top: 15px; right: 25px; color: #fff; font-size: 2rem; cursor: pointer; font-weight: bold;">&times;</span>
+        <img id="zoomed-image" src="" alt="Imagem Ampliada" style="max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <!-- JAVASCRIPT PRINCIPAL -->
+    <script src="script.js"></script>
+</body>
+</html>
