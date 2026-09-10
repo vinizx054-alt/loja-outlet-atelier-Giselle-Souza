@@ -71,15 +71,29 @@
             <div class="modal-body">
                 <!-- LOGIN ADMIN -->
                 <div id="admin-login">
-                    <p style="margin-bottom: 1rem; color: var(--gray);">Digite a senha de acesso para gerenciar a loja:</p>
-                    <div class="form-group">
-                        <input type="password" id="admin-password" placeholder="Senha de acesso" onkeypress="if(event.key === 'Enter') loginAdmin()">
+                    <p style="margin-bottom: 1rem; color: var(--gray);">Digite suas credenciais para gerenciar a loja:</p>
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label style="font-size: 0.85rem; font-weight: 600;">E-mail</label>
+                        <input type="email" id="admin-email" placeholder="seu-email@exemplo.com">
                     </div>
-                    <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%; justify-content: center;">Entrar</button>
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label style="font-size: 0.85rem; font-weight: 600;">Senha</label>
+                        <input type="password" id="admin-password" placeholder="Sua senha de acesso" onkeypress="if(event.key === 'Enter') loginAdmin()">
+                    </div>
+                    <button class="btn btn-primary" onclick="loginAdmin()" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
                 </div>
 
                 <!-- DASHBOARD ADMIN -->
                 <div id="admin-dashboard" class="hidden">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <span id="user-display" style="font-size: 0.85rem; color: #555; font-weight: 600;"></span>
+                        <button onclick="logoutAdmin()" class="btn" style="background: #ef4444; color: white; padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </button>
+                    </div>
+
                     <div class="admin-tabs">
                         <button class="admin-tab active" onclick="switchTab('add', event)">Adicionar Produto</button>
                         <button class="admin-tab" onclick="switchTab('list', event)">Gerenciar Produtos</button>
@@ -118,7 +132,7 @@
                             <!-- Pré-visualização da galeria -->
                             <div id="product-gallery-preview" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;"></div>
                         </div>
-                                                    
+                                                                    
                         <div class="form-group">
                             <label>Descrição</label>
                             <textarea id="product-desc" rows="3" placeholder="Detalhes do produto..."></textarea>
@@ -258,8 +272,9 @@
     <!-- TOAST -->
     <div id="toast" class="toast"></div>
 
-    <!-- Firebase -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
     <!-- JAVASCRIPT PRINCIPAL -->

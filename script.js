@@ -80,6 +80,83 @@ window.addEventListener('hashchange', () => {
     }
 });
 
+// ==================== AUTENTICAÇÃO E MODAL ADMIN ====================
+function openAdmin() {
+    const panel = document.getElementById('admin-panel');
+    if (panel) panel.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAdmin() {
+    const panel = document.getElementById('admin-panel');
+    if (panel) panel.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function loginAdmin() {
+    const emailInput = document.getElementById('admin-email');
+    const passwordInput = document.getElementById('admin-password');
+
+    const email = emailInput ? emailInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value : '';
+
+    if (!email || !password) {
+        showToast("Por favor, preencha o e-mail e a senha.", "error");
+        return;
+    }
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            showToast("Login realizado com sucesso!");
+            if (passwordInput) passwordInput.value = '';
+        })
+        .catch((error) => {
+            console.error("Erro na autenticação:", error);
+            showToast("E-mail ou senha incorretos.", "error");
+        });
+}
+
+function logoutAdmin() {
+    firebase.auth().signOut().then(() => {
+        showToast("Você saiu do painel.");
+    }).catch((error) => {
+        showToast("Erro ao tentar sair.", "error");
+    });
+}
+
+// Monitora o estado da sessão do Firebase Auth
+if (firebaseReady) {
+    firebase.auth().onAuthStateChanged((user) => {
+        const loginDiv = document.getElementById('admin-login');
+        const dashboardDiv = document.getElementById('admin-dashboard');
+        const userDisplay = document.getElementById('user-display');
+
+        if (user) {
+            if (loginDiv) loginDiv.classList.add('hidden');
+            if (dashboardDiv) dashboardDiv.classList.remove('hidden');
+            if (userDisplay) userDisplay.textContent = `Logado como: ${user.email}`;
+            renderAdminProducts();
+        } else {
+            if (loginDiv) loginDiv.classList.remove('hidden');
+            if (dashboardDiv) dashboardDiv.classList.add('hidden');
+            if (userDisplay) userDisplay.textContent = '';
+        }
+    });
+}
+
+function switchTab(tab, evt) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+    if (evt && evt.target) {
+        evt.target.classList.add('active');
+    }
+    const tabEl = document.getElementById(`tab-${tab}`);
+    if (tabEl) tabEl.classList.add('active');
+    if (tab === 'list') renderAdminProducts();
+}
+
+// ==================== CARREGAMENTO E MANTENIMENTO DE DADOS ====================
 function loadProducts() {
     if (firebaseReady) {
         db.collection('products').onSnapshot(snapshot => {
@@ -212,29 +289,21 @@ function openDescModal(productId) {
     const product = products.find(p => String(p.id) === String(productId));
     if (!product) return;
 
-    // Guardar lista completa de fotos do produto
     const mainImg = product.image;
     const extraImgs = product.images || [];
     currentModalImages = [mainImg, ...extraImgs].filter(Boolean);
 
-    // Foto Principal
     const imgEl = document.getElementById('desc-modal-img');
     if (imgEl) imgEl.src = mainImg;
 
-    // Configurar o Quadrado Cinza com "..."
     const moreBtn = document.getElementById('more-photos-btn');
     const galleryContainer = document.getElementById('gallery-expanded-container');
-    if (galleryContainer) galleryContainer.style.display = 'none'; // Começa fechado
+    if (galleryContainer) galleryContainer.style.display = 'none';
 
     if (moreBtn) {
-        if (currentModalImages.length > 1) {
-            moreBtn.style.display = 'flex';
-        } else {
-            moreBtn.style.display = 'none';
-        }
+        moreBtn.style.display = currentModalImages.length > 1 ? 'flex' : 'none';
     }
 
-    // Preencher dados do texto
     const titleEl = document.getElementById('desc-modal-title');
     const priceEl = document.getElementById('desc-modal-price');
     const descEl = document.getElementById('desc-modal-text');
@@ -288,7 +357,6 @@ function renderGalleryThumbs(imagesList) {
             thumb.style.transform = 'scale(1)';
         };
 
-        // Ao clicar em qualquer miniatura, abre DIRETO no Zoom
         thumb.onclick = () => {
             openZoomModal(url);
         };
@@ -612,49 +680,6 @@ function openEditModal(id) {
 function closeEditModal() {
     const editModal = document.getElementById('edit-modal');
     if (editModal) editModal.classList.remove('active');
-}
-
-function openAdmin() {
-    const panel = document.getElementById('admin-panel');
-    if (panel) panel.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeAdmin() {
-    const panel = document.getElementById('admin-panel');
-    if (panel) panel.classList.remove('active');
-    document.body.style.overflow = '';
-    logoutAdmin();
-}
-
-function loginAdmin() {
-    const password = document.getElementById('admin-password').value;
-    if (password === 'Gis@Atelie2026!') {
-        document.getElementById('admin-login').classList.add('hidden');
-        document.getElementById('admin-dashboard').classList.remove('hidden');
-        showToast('Login realizado com sucesso!');
-        renderAdminProducts();
-    } else {
-        showToast('Senha incorreta!', 'error');
-    }
-}
-
-function logoutAdmin() {
-    if (document.getElementById('admin-login')) document.getElementById('admin-login').classList.remove('hidden');
-    if (document.getElementById('admin-dashboard')) document.getElementById('admin-dashboard').classList.add('hidden');
-    if (document.getElementById('admin-password')) document.getElementById('admin-password').value = '';
-}
-
-function switchTab(tab, evt) {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-
-    if (evt && evt.target) {
-        evt.target.classList.add('active');
-    }
-    const tabEl = document.getElementById(`tab-${tab}`);
-    if (tabEl) tabEl.classList.add('active');
-    if (tab === 'list') renderAdminProducts();
 }
 
 async function loadConfig() {
