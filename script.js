@@ -285,33 +285,35 @@ function emptyState() {
 }
 
 // ==================== MODAL DE DESCRIÇÃO E GALERIA ====================
+// ==================== MODAL DE DESCRIÇÃO E GALERIA ====================
 function openDescModal(productId) {
     const product = products.find(p => String(p.id) === String(productId));
     if (!product) return;
 
+    // A primeira foto é sempre a principal (product.image) e o resto são as secundárias
     const mainImg = product.image;
     const extraImgs = product.images || [];
     currentModalImages = [mainImg, ...extraImgs].filter(Boolean);
 
+    // Atualiza a imagem principal em destaque
     const imgEl = document.getElementById('desc-modal-img');
     if (imgEl) imgEl.src = mainImg;
 
-    const moreBtn = document.getElementById('more-photos-btn');
-    const galleryContainer = document.getElementById('gallery-expanded-container');
-    if (galleryContainer) galleryContainer.style.display = 'none';
-
-    if (moreBtn) {
-        moreBtn.style.display = currentModalImages.length > 1 ? 'flex' : 'none';
-    }
-
+    // Preenche títulos, preço e descrição
     const titleEl = document.getElementById('desc-modal-title');
     const priceEl = document.getElementById('desc-modal-price');
     const descEl = document.getElementById('desc-modal-text');
+    const categoryEl = document.getElementById('desc-modal-category');
 
+    if (categoryEl) categoryEl.textContent = product.type === 'vestido' ? 'VESTIDO' : 'TECIDO';
     if (titleEl) titleEl.textContent = product.name;
     if (priceEl) priceEl.textContent = `R$ ${Number(product.price).toFixed(2)}`;
     if (descEl) descEl.textContent = product.desc || 'Nenhuma descrição ou medida informada para este produto.';
 
+    // Renderiza a galeria de miniaturas (fotos principal + secundárias)
+    renderGalleryThumbs(currentModalImages);
+
+    // Botão de compra no WhatsApp dentro da modal
     const buyBtn = document.getElementById('desc-modal-buy-btn');
     if (buyBtn) {
         buyBtn.onclick = () => {
@@ -322,6 +324,45 @@ function openDescModal(productId) {
 
     const modal = document.getElementById('desc-modal');
     if (modal) modal.classList.add('active');
+}
+
+function renderGalleryThumbs(imagesList) {
+    const container = document.getElementById('gallery-thumbs-list');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Se só tiver 1 imagem, esconde as miniaturas
+    if (imagesList.length <= 1) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
+    imagesList.forEach((url, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        thumb.alt = `Foto ${index + 1}`;
+        thumb.className = index === 0 ? 'thumb-img active' : 'thumb-img';
+
+        // Ao clicar em uma miniatura, altera a imagem principal em destaque
+        thumb.onclick = () => {
+            const mainImg = document.getElementById('desc-modal-img');
+            if (mainImg) mainImg.src = url;
+
+            // Altera o destaque visual da miniatura ativa
+            document.querySelectorAll('#gallery-thumbs-list .thumb-img').forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
+        };
+
+        container.appendChild(thumb);
+    });
+}
+
+function closeDescModal() {
+    const modal = document.getElementById('desc-modal');
+    if (modal) modal.classList.remove('active');
 }
 
 function toggleGalleryView() {

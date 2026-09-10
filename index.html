@@ -208,46 +208,39 @@
         </div>
     </div>
 
-    <!-- MODAL DE DESCRIÇÃO COM GALERIA DE FOTOS -->
-    <div id="desc-modal" class="modal-overlay">
-        <div class="modal-card" style="max-width: 600px; text-align: left; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto;">
-            <button class="modal-close" onclick="closeDescModal()">&times;</button>
-            
-            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 1rem; position: relative;">
-                <div style="position: relative;">
-                    <img id="desc-modal-img" src="" alt="Produto" style="max-height: 220px; max-width: 200px; object-fit: contain; border-radius: 8px; border: 1px solid #eee;">
-                </div>
+    <!-- MODAL DE DESCRIÇÃO E GALERIA DE FOTOS -->
+<div id="modal-descricao" class="modal-overlay">
+  <div class="modal-card modal-large">
+    <button class="modal-close" onclick="fecharModal()">&times;</button>
 
-                <div id="more-photos-btn" onclick="toggleGalleryView()" style="display: none; width: 90px; height: 120px; background: rgba(200, 200, 200, 0.45); backdrop-filter: blur(4px); border: 2px dashed #999; border-radius: 10px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s ease;">
-                    <span style="font-size: 2rem; font-weight: bold; color: #444; letter-spacing: 2px; line-height: 1;">...</span>
-                    <span style="font-size: 0.75rem; color: #555; margin-top: 4px; font-weight: 600;">Mais fotos</span>
-                </div>
-            </div>
-
-            <div id="gallery-expanded-container" style="display: none; background: #f0f0f0; padding: 10px; border-radius: 8px; margin-bottom: 1rem;">
-                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #555; font-weight: bold;"><i class="fas fa-images"></i> Galeria de Fotos do Produto:</p>
-                <div id="gallery-thumbs-list" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px;"></div>
-            </div>
-
-            <div style="text-align: center; margin-bottom: 0.8rem;">
-                <h3 id="desc-modal-title" class="modal-title" style="font-size: 1.3rem; margin-bottom: 4px;"></h3>
-                <p id="desc-modal-price" class="modal-price" style="font-size: 1.2rem; color: #8B263E; font-weight: bold; margin: 0;"></p>
-            </div>
-            
-            <h4 style="border-bottom: 2px solid #eee; padding-bottom: 0.4rem; margin-bottom: 0.8rem; color: #333;">
-                <i class="fas fa-align-left"></i> Descrição & Medidas
-            </h4>
-            
-            <div id="desc-modal-text" style="overflow-y: auto; max-height: 200px; font-size: 0.95rem; line-height: 1.6; color: #444; background: #f9f9f9; padding: 1rem; border-radius: 8px; border: 1px solid #eee; white-space: pre-wrap;"></div>
-
-            <div style="margin-top: 1.2rem; display: flex; gap: 0.5rem; justify-content: flex-end;">
-                <button class="btn btn-secondary" onclick="closeDescModal()">Fechar</button>
-                <button id="desc-modal-buy-btn" class="btn btn-whatsapp">
-                    <i class="fab fa-whatsapp"></i> Comprar
-                </button>
-            </div>
+    <div class="modal-body-grid">
+      <!-- Coluna da Esquerda: Fotos -->
+      <div class="modal-gallery-side">
+        <div class="main-image-container">
+          <img id="modal-img-principal" src="" alt="Imagem Principal">
         </div>
+        <!-- Lista de Miniaturas (Principal + Secundárias) -->
+        <div id="modal-miniaturas" class="thumbs-container"></div>
+      </div>
+
+      <!-- Coluna da Direita: Informações e Botão -->
+      <div class="modal-info-side">
+        <span id="modal-categoria" class="product-tag">VESTIDO</span>
+        <h2 id="modal-titulo" class="modal-title"></h2>
+        <div id="modal-preco" class="product-price-highlight"></div>
+
+        <div class="description-box">
+          <h3><i class="fas fa-align-left"></i> Descrição & Medidas</h3>
+          <p id="modal-texto-descricao"></p>
+        </div>
+
+        <button id="modal-btn-comprar" class="btn btn-whatsapp full-width">
+          <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
+        </button>
+      </div>
     </div>
+  </div>
+</div>
 
     <!-- MODAL DE CONFIRMAÇÃO DE COMPRA -->
     <div id="buy-modal" class="modal-overlay">
@@ -279,5 +272,39 @@
 
     <!-- JAVASCRIPT PRINCIPAL -->
     <script src="script.js"></script>
+    <!-- Modal de Detalhes do Produto -->
+<div id="modal-descricao" class="modal-overlay">
+  <div class="modal-container">
+    <button class="modal-close" onclick="fecharModal()">&times;</button>
+    
+    <div class="modal-body">
+      <!-- Galeria de Fotos -->
+      <div class="modal-galeria">
+        <div class="foto-destaque">
+          <img id="modal-img-principal" src="" alt="Imagem Principal">
+        </div>
+        <div id="modal-miniaturas" class="miniaturas-list">
+          <!-- Miniaturas injetadas via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Informações do Produto -->
+      <div class="modal-info">
+        <span id="modal-categoria" class="modal-tag">VESTIDO</span>
+        <h2 id="modal-titulo">Nome do Vestido</h2>
+        <p id="modal-preco" class="modal-preco">R$ 0,00</p>
+        
+        <div class="modal-descricao-box">
+          <h3>Descrição & Medidas</h3>
+          <p id="modal-texto-descricao"></p>
+        </div>
+
+        <a id="modal-btn-comprar" href="#" target="_blank" class="btn-comprar-modal">
+          <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

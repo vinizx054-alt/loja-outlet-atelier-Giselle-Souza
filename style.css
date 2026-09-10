@@ -91,6 +91,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.8rem;
+    font-family: "Rye", serif;
+    font-weight: 400;
 }
 
 /* ==================== PRODUCTS GRID ==================== */
@@ -189,6 +191,8 @@ body {
     gap: 0.5rem;
     font-weight: 600;
     text-decoration: none;
+    border-radius: 8px;
+    padding: 12px;
 }
 
 .btn-whatsapp:hover {
@@ -215,7 +219,7 @@ body {
     background: #4B5563;
 }
 
-/* Imagem de Pré-visualização no Modal de Edição */
+/* Pre-visualização no Modal de Edição */
 .edit-preview-img {
     width: 100%;
     max-height: 180px;
@@ -234,7 +238,7 @@ body {
     margin-top: 4rem;
 }
 
-/* ==================== MODAL ADMIN & EDIÇÃO ==================== */
+/* ==================== MODAL E OVERLAY GERAL ==================== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -266,12 +270,14 @@ body {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    padding: 25px;
+    position: relative;
 }
 
 .modal-card {
     background: #FFFFFF;
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
     padding: 1.8rem;
     border-radius: 16px;
     text-align: center;
@@ -287,22 +293,28 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* Define o cabeçalho como referência para o botão */
+    position: relative;
 }
 
 .close-btn, .modal-close {
     position: absolute;
-    top: 10px;
-    right: 15px;
-    background: none;
+    top: 12px;
+    right: 18px;
+    background: transparent;
     border: none;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: var(--dark);
     cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.close-btn:hover, .modal-close:hover {
+    transform: scale(1.1);
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 1rem 0;
 }
 
 .modal-img {
@@ -315,14 +327,14 @@ body {
 
 .modal-title {
     color: var(--dark);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     margin-bottom: 0.3rem;
 }
 
 .modal-price {
     color: var(--primary);
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     margin-bottom: 0.8rem;
 }
 
@@ -333,7 +345,109 @@ body {
     margin-bottom: 1.2rem;
 }
 
-/* ADMIN FORM & TABS */
+/* ==================== MODAL DE DETALHES & GALERIA ==================== */
+.modal-large {
+    max-width: 820px !important;
+    width: 95%;
+    padding: 25px;
+}
+
+.modal-body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+    margin-top: 10px;
+}
+
+/* Foto principal em Destaque */
+.foto-destaque img, 
+.main-image-container img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Carrossel de Miniaturas */
+.miniaturas-list, 
+.thumbs-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.miniaturas-list img, 
+.thumb-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid #E5E7EB;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.miniaturas-list img.ativa,
+.miniaturas-list img:hover,
+.thumb-img.active,
+.thumb-img:hover {
+    border-color: var(--primary);
+    transform: scale(1.05);
+}
+
+/* Área de Informações da Modal */
+.modal-tag, 
+.product-tag {
+    font-size: 0.75rem;
+    color: var(--gray);
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.product-price-highlight, 
+.modal-preco {
+    font-size: 1.5rem;
+    color: var(--primary);
+    font-weight: bold;
+    margin: 8px 0 15px 0;
+}
+
+.modal-descricao-box, 
+.description-box {
+    background: #F9FAFB;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    margin-bottom: 20px;
+}
+
+.modal-descricao-box h3, 
+.description-box h3 {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: var(--dark);
+}
+
+.modal-descricao-box p, 
+.description-box p {
+    color: #4B5563;
+    line-height: 1.6;
+    font-size: 0.9rem;
+    white-space: pre-wrap; /* Preserva quebras de linha enviadas pelo painel */
+}
+
+.full-width {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ==================== ADMIN FORM & TABS ==================== */
 .admin-tabs {
     display: flex;
     gap: 0.5rem;
@@ -377,7 +491,9 @@ body {
     font-size: 0.9rem;
 }
 
-.form-group input, .form-group select, .form-group textarea {
+.form-group input, 
+.form-group select, 
+.form-group textarea {
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #D1D5DB;
@@ -421,29 +537,23 @@ body {
     font-size: 3rem;
     margin-bottom: 1rem;
 }
-.section-title {
-    text-align: center;
-    font-size: 2.2rem;
-    color: var(--primary);
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    font-family: "Rye", serif;
-    font-weight: 400;
-}
-.close-btn {
-    position: absolute;
-    top: 50%;
-    right: 1.2rem;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: 1.8rem;
-    color: var(--white); /* Cor branca para contrastar com o fundo escuro */
-    cursor: pointer;
-    line-height: 1;
-    padding: 0.2rem 0.5rem;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+
+/* ==================== RESPONSIVO (TELAS MENORES E CELULARES) ==================== */
+@media (max-width: 768px) {
+    .modal-body-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .foto-destaque img, 
+    .main-image-container img {
+        height: 280px;
+    }
+
+    .header-content {
+        padding: 0 1rem;
+    }
+
+    .container {
+        padding: 1.5rem 1rem;
+    }
 }
