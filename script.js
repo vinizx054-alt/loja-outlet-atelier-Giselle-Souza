@@ -406,24 +406,62 @@ async function uploadToImgBB(file) {
     }
 }
 
-// ==================== CONTROLE DE INPUTS DE UPLOAD ====================
+// ==================== UPLOAD AUTOMÁTICO DE ARQUIVOS ====================
 function setupImageUploadInputs() {
+    // Upload automático ao selecionar fotos no formulário de ADICIONAR
     const input = document.getElementById('product-image-file');
     if (input) {
-        input.addEventListener('change', (e) => {
+        input.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files);
-            addFormFiles.push(...files);
-            renderFormPreviews('product-gallery-preview', addFormFiles);
+            if (!files.length) return;
+
+            const linksTextarea = document.getElementById('product-image-links');
+            showToast('Enviando imagem(ns)... aguarde.');
+
+            for (const file of files) {
+                try {
+                    const uploadedUrl = await uploadToImgBB(file);
+                    
+                    if (linksTextarea) {
+                        const currentVal = linksTextarea.value.trim();
+                        linksTextarea.value = currentVal ? `${currentVal}\n${uploadedUrl}` : uploadedUrl;
+                    }
+                    
+                    showToast('Imagem enviada e link inserido!');
+                } catch (err) {
+                    console.error('Erro no upload:', err);
+                    showToast('Erro ao enviar imagem para o ImgBB.', 'error');
+                }
+            }
             input.value = '';
         });
     }
 
+    // Upload automático ao selecionar fotos no formulário de EDITAR
     const editInput = document.getElementById('edit-product-image-file');
     if (editInput) {
-        editInput.addEventListener('change', (e) => {
+        editInput.addEventListener('change', async (e) => {
             const files = Array.from(e.target.files);
-            editFormFiles.push(...files);
-            renderFormPreviews('edit-product-gallery-preview', editFormFiles);
+            if (!files.length) return;
+
+            const editLinksTextarea = document.getElementById('edit-product-image-links');
+            showToast('Enviando imagem(ns)... aguarde.');
+
+            for (const file of files) {
+                try {
+                    const uploadedUrl = await uploadToImgBB(file);
+                    
+                    if (editLinksTextarea) {
+                        const currentVal = editLinksTextarea.value.trim();
+                        editLinksTextarea.value = currentVal ? `${currentVal}\n${uploadedUrl}` : uploadedUrl;
+                    }
+
+                    showToast('Imagem enviada e link inserido!');
+                } catch (err) {
+                    console.error('Erro no upload:', err);
+                    showToast('Erro ao enviar imagem para o ImgBB.', 'error');
+                }
+            }
             editInput.value = '';
         });
     }
@@ -434,10 +472,16 @@ function renderFormPreviews(containerId, filesOrUrls) {
     if (!container) return;
 
     container.innerHTML = filesOrUrls.map((item, i) => {
-        const src = (typeof item === 'string') ? item : URL.createObjectURL(item);
+        let src = '';
+        if (typeof item === 'string') {
+            src = item;
+        } else if (item instanceof File || item instanceof Blob) {
+            src = URL.createObjectURL(item);
+        }
+
         return `
             <div style="position: relative; display: inline-block; margin: 4px;">
-                <img src="${src}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc;">
+                <img src="${src}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc;" onerror="this.src='https://via.placeholder.com/60?text=Erro'">
                 <span style="position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.6); color: white; font-size: 10px; padding: 2px 4px; border-radius: 3px;">
                     ${i === 0 ? 'Principal' : `#${i+1}`}
                 </span>
@@ -473,28 +517,16 @@ async function addProduct() {
         return;
     }
 
-    if (addFormFiles.length === 0 && urlLinks.length === 0) {
+    if (urlLinks.length === 0) {
         showToast('Adicione pelo menos 1 foto para o produto!', 'error');
         return;
     }
 
-    showToast('Enviando produto e imagens, aguarde...');
-
-    let allUploadedUrls = [];
+    showToast('Salvando produto, aguarde...');
 
     try {
-        for (const file of addFormFiles) {
-            if (typeof file !== 'string') {
-                const uploadedUrl = await uploadToImgBB(file);
-                allUploadedUrls.push(uploadedUrl);
-            } else {
-                allUploadedUrls.push(file);
-            }
-        }
-
-        const allImages = [...allUploadedUrls, ...urlLinks];
-        const mainImage = allImages[0];
-        const extraImages = allImages.slice(1);
+        const mainImage = urlLinks[0];
+        const extraImages = urlLinks.slice(1);
 
         const newProduct = {
             id: String(Date.now()),
@@ -513,12 +545,10 @@ async function addProduct() {
         if (document.getElementById('product-price')) document.getElementById('product-price').value = '';
         if (document.getElementById('product-desc')) document.getElementById('product-desc').value = '';
         if (document.getElementById('product-image-links')) document.getElementById('product-image-links').value = '';
-        addFormFiles = [];
-        renderFormPreviews('product-gallery-preview', []);
 
     } catch (e) {
         console.error('Erro ao salvar produto:', e);
-        showToast('Erro ao fazer upload das imagens ou salvar online.', 'error');
+        showToast('Erro ao salvar o produto.', 'error');
     }
 }
 
@@ -537,23 +567,16 @@ async function saveEditProduct() {
         return;
     }
 
+    if (urlLinks.length === 0) {
+        showToast('O produto precisa de pelo menos 1 foto!', 'error');
+        return;
+    }
+
     showToast('Salvando alterações...');
 
-    let allUploadedUrls = [];
-
     try {
-        for (const item of editFormFiles) {
-            if (typeof item !== 'string') {
-                const url = await uploadToImgBB(item);
-                allUploadedUrls.push(url);
-            } else {
-                allUploadedUrls.push(item);
-            }
-        }
-
-        const allImages = [...allUploadedUrls, ...urlLinks];
-        const mainImage = allImages[0] || 'https://via.placeholder.com/400x400?text=Sem+Imagem';
-        const extraImages = allImages.slice(1);
+        const mainImage = urlLinks[0];
+        const extraImages = urlLinks.slice(1);
 
         const updatedProduct = {
             id,
@@ -669,9 +692,9 @@ function openEditModal(id) {
     if (document.getElementById('edit-product-desc')) document.getElementById('edit-product-desc').value = product.desc;
 
     const existingImages = [product.image, ...(product.images || [])].filter(Boolean);
-    editFormFiles = [...existingImages];
-
-    renderFormPreviews('edit-product-gallery-preview', editFormFiles);
+    if (document.getElementById('edit-product-image-links')) {
+        document.getElementById('edit-product-image-links').value = existingImages.join('\n');
+    }
 
     const editModal = document.getElementById('edit-modal');
     if (editModal) editModal.classList.add('active');
