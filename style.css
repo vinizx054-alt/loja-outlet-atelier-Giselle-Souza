@@ -34,7 +34,7 @@ body {
     z-index: 1000;
 }
 
-.header-content {
+.header-container, .header-content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
@@ -53,13 +53,13 @@ body {
     filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.4));
 }
 
-.nav-links {
+.nav-menu, .nav-links {
     display: flex;
     gap: 2rem;
     align-items: center;
 }
 
-.nav-links a {
+.nav-menu a, .nav-links a {
     color: var(--white);
     text-decoration: none;
     font-weight: 500;
@@ -67,18 +67,18 @@ body {
     cursor: pointer;
 }
 
-.nav-links a:hover {
+.nav-menu a:hover, .nav-links a:hover {
     opacity: 0.8;
 }
 
 /* ==================== MAIN CONTENT & SECTIONS ==================== */
-.container {
+.main-container, .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem 2rem;
 }
 
-.catalog-section {
+.product-section, .catalog-section {
     margin-bottom: 4rem;
 }
 
@@ -91,6 +91,8 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.8rem;
+    font-family: "Rye", serif;
+    font-weight: 400;
 }
 
 /* ==================== PRODUCTS GRID ==================== */
@@ -170,6 +172,12 @@ body {
     gap: 0.5rem;
 }
 
+.btn-large {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+}
+
 .btn-primary {
     background: var(--primary);
     color: white;
@@ -182,7 +190,6 @@ body {
 .btn-whatsapp {
     background: #25D366;
     color: white;
-    width: 100%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -215,50 +222,27 @@ body {
     background: #4B5563;
 }
 
-/* Imagem de Pré-visualização no Modal de Edição */
-.edit-preview-img {
-    width: 100%;
-    max-height: 180px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    border: 1px solid #e5e7eb;
-}
-
-/* ==================== FOOTER ==================== */
-.footer {
-    background: var(--dark);
-    color: var(--white);
-    text-align: center;
-    padding: 2rem;
-    margin-top: 4rem;
-}
-
-/* ==================== MODAL ADMIN & EDIÇÃO ==================== */
-.modal-overlay {
+/* ==================== MODAIS (OVERLAY GENERALIZADO) ==================== */
+.modal, .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.7);
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 2000;
     padding: 1.5rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+    overflow-y: auto;
 }
 
-.modal-overlay.active {
-    display: flex;
-    opacity: 1;
-    pointer-events: auto;
+.modal.active, .modal-overlay.active {
+    display: flex !important;
 }
 
-.modal-container {
+.modal-content, .modal-container {
     background: var(--white);
     border-radius: 16px;
     max-width: 600px;
@@ -266,18 +250,8 @@ body {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.modal-card {
-    background: #FFFFFF;
-    width: 90%;
-    max-width: 400px;
-    padding: 1.8rem;
-    border-radius: 16px;
-    text-align: center;
     position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    border: 2px solid var(--secondary);
+    padding: 1.5rem;
 }
 
 .modal-header {
@@ -287,22 +261,39 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative; /* Define o cabeçalho como referência para o botão */
+    position: relative;
+    border-radius: 12px 12px 0 0;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
 }
 
-.close-btn, .modal-close {
+.close-modal, .close-btn, .modal-close {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 15px;
+    right: 20px;
     background: none;
     border: none;
-    font-size: 1.6rem;
-    color: var(--dark);
+    font-size: 1.8rem;
+    color: #888;
     cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.modal-header .close-modal, 
+.modal-header .close-btn {
+    color: var(--white);
+}
+
+.close-modal:hover, .close-btn:hover {
+    color: #000;
+}
+
+.modal-header .close-modal:hover {
+    color: #ddd;
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 0.5rem 0;
 }
 
 .modal-img {
@@ -326,14 +317,73 @@ body {
     margin-bottom: 0.8rem;
 }
 
-.modal-text {
+.modal-instruction, .modal-text {
     color: var(--gray);
     font-size: 0.95rem;
     line-height: 1.4;
     margin-bottom: 1.2rem;
 }
 
-/* ADMIN FORM & TABS */
+/* ==================== PAINEL ADMIN LATERAL (DRAWER) ==================== */
+.admin-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+    background-color: var(--white);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+    z-index: 3000;
+    transition: right 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.admin-panel.active {
+    right: 0 !important;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--dark);
+    color: var(--white);
+}
+
+.admin-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.close-admin {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.admin-content {
+    padding: 20px;
+    flex: 1;
+}
+
+.admin-login-box {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.login-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+/* ==================== FORMULÁRIOS E ABAS ==================== */
 .admin-tabs {
     display: flex;
     gap: 0.5rem;
@@ -362,7 +412,7 @@ body {
 }
 
 .tab-content.active {
-    display: block;
+    display: block !important;
 }
 
 .form-group {
@@ -385,8 +435,31 @@ body {
     font-size: 0.95rem;
 }
 
+.form-help {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 4px;
+    display: block;
+}
+
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
 .hidden {
     display: none !important;
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+    background: var(--dark);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
 }
 
 /* ==================== TOAST ==================== */
@@ -402,12 +475,22 @@ body {
     transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s;
-    z-index: 3000;
+    z-index: 4000;
 }
 
 .toast.show {
     transform: translateY(0);
     opacity: 1;
+}
+
+.btn-undo {
+    background: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    cursor: pointer;
 }
 
 /* ==================== EMPTY STATE ==================== */
@@ -420,30 +503,4 @@ body {
 .empty-state i {
     font-size: 3rem;
     margin-bottom: 1rem;
-}
-.section-title {
-    text-align: center;
-    font-size: 2.2rem;
-    color: var(--primary);
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-    font-family: "Rye", serif;
-    font-weight: 400;
-}
-.close-btn {
-    position: absolute;
-    top: 50%;
-    right: 1.2rem;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: 1.8rem;
-    color: var(--white); /* Cor branca para contrastar com o fundo escuro */
-    cursor: pointer;
-    line-height: 1;
-    padding: 0.2rem 0.5rem;
-    transition: opacity 0.2s ease, transform 0.2s ease;
 }
