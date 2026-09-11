@@ -579,7 +579,7 @@ body {
     color: var(--secondary) !important; /* Muda para a cor secundária (dourado) ao passar o mouse */
     transform: translateY(-50%) scale(1.15);
 }
-/* --- CORREÇÃO DO MODAL DE DESCRIÇÃO --- */
+/* ==================== CORREÇÃO DO MODAL DE DESCRIÇÃO & SCROLL ==================== */
 
 /* Ajuste da estrutura interna do modal */
 .modal-body-grid {
@@ -593,7 +593,7 @@ body {
 .modal-info-side {
     display: flex;
     flex-direction: column;
-    max-height: 80vh; /* Mantém uma altura máxima para não esticar a tela toda */
+    min-width: 0; /* OBRIGATÓRIO: Permite que elementos flex encolham e não vazem */
 }
 
 /* Caixa de descrição com rolagem vertical */
@@ -603,46 +603,51 @@ body {
     border-radius: 8px;
     border: 1px solid #e5e7eb;
     margin: 1rem 0;
- }   
-    .description-box {
-    background-color: #f9fafb;
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    margin: 1rem 0;
 
-    /* Permite rolar apenas o texto da descrição */
-    max-height: 200px; /* Ajuste essa altura se quiser mais ou menos espaço */
+    /* Limite de altura e rolagem */
+    max-height: 220px;
     overflow-y: auto;
-    
-    /* Garante a quebra de texto automático (evita scroll horizontal) */
+    -webkit-overflow-scrolling: touch; /* Rolagem suave no celular */
+
+    /* Previne estouro de palavras contínuas */
     word-break: break-word;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 }
-.description-box p {
+
+.description-box p,
+#desc-modal-text {
     margin: 0;
     line-height: 1.5;
     color: #4b5563;
     white-space: pre-wrap; /* Preserva as quebras de linha enviadas no cadastro */
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
-/* --- RESPONSIVIDADE PARA CELULARES --- */
+/* Estilização sutil da barra de rolagem da descrição */
+.description-box::-webkit-scrollbar {
+    width: 6px;
+}
+.description-box::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* ==================== RESPONSIVIDADE (CELULAR) ==================== */
 @media (max-width: 768px) {
+    .modal-container.modal-large {
+        max-height: 85vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 1.2rem;
+    }
+
     .modal-body-grid {
-        grid-template-columns: 1fr; /* Foto em cima, descrição embaixo no celular */
+        grid-template-columns: 1fr; /* Foto acima, texto abaixo */
         gap: 1rem;
     }
 
-    .modal-container.modal-large {
-        max-height: 90vh;
-        overflow-y: auto; /* Permite rolar o modal todo no celular */
-        padding: 1rem;
-    }
-
     .description-box {
-        max-height: 150px; /* Reduz um pouco o espaço no celular */
-    }
-    .description-box {
-        max-height: 150px; /* Reduz um pouco o espaço no celular */
+        max-height: 180px; /* Altura ideal para telas de celular */
     }
 }
