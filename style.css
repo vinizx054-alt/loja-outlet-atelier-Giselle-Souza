@@ -579,3 +579,70 @@ body {
     color: var(--secondary) !important; /* Muda para a cor secundária (dourado) ao passar o mouse */
     transform: translateY(-50%) scale(1.15);
 }
+/* --- CORREÇÃO DO MODAL DE DESCRIÇÃO --- */
+
+/* Ajuste da estrutura interna do modal */
+.modal-body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Coluna de informações e texto */
+.modal-info-side {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh; /* Mantém uma altura máxima para não esticar a tela toda */
+}
+
+/* Caixa de descrição com rolagem vertical */
+.description-box {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin: 1rem 0;
+ }   
+    .description-box {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin: 1rem 0;
+
+    /* Permite rolar apenas o texto da descrição */
+    max-height: 200px; /* Ajuste essa altura se quiser mais ou menos espaço */
+    overflow-y: auto;
+    
+    /* Garante a quebra de texto automático (evita scroll horizontal) */
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.description-box p {
+    margin: 0;
+    line-height: 1.5;
+    color: #4b5563;
+    white-space: pre-wrap; /* Preserva as quebras de linha enviadas no cadastro */
+}
+
+/* --- RESPONSIVIDADE PARA CELULARES --- */
+@media (max-width: 768px) {
+    .modal-body-grid {
+        grid-template-columns: 1fr; /* Foto em cima, descrição embaixo no celular */
+        gap: 1rem;
+    }
+
+    .modal-container.modal-large {
+        max-height: 90vh;
+        overflow-y: auto; /* Permite rolar o modal todo no celular */
+        padding: 1rem;
+    }
+
+    .description-box {
+        max-height: 150px; /* Reduz um pouco o espaço no celular */
+    }
+    .description-box {
+        max-height: 150px; /* Reduz um pouco o espaço no celular */
+    }
+}
