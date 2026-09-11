@@ -557,3 +557,25 @@ body {
         padding: 1.5rem 1rem;
     }
 }
+/* CORREÇÃO DO BOTÃO 'X' NO CABEÇALHO ESCURO */
+.modal-header .modal-close,
+.modal-header .admin-close {
+    color: #FFFFFF !important; /* Força o ícone a ficar branco visível */
+    top: 50%;
+    transform: translateY(-50%);
+    right: 18px;
+    font-size: 2rem;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    line-height: 1;
+    z-index: 10;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Efeito ao passar o mouse */
+.modal-header .modal-close:hover,
+.modal-header .admin-close:hover {
+    color: var(--secondary) !important; /* Muda para a cor secundária (dourado) ao passar o mouse */
+    transform: translateY(-50%) scale(1.15);
+}
