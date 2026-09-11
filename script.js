@@ -461,33 +461,61 @@ function toggleGalleryView() {
 
 function renderGalleryThumbs(imagesList) {
     const container = document.getElementById('gallery-thumbs-list');
+    const mainImg = document.getElementById('desc-modal-img');
     if (!container) return;
 
     container.innerHTML = '';
 
+    // Permite clicar na imagem principal para dar zoom
+    if (mainImg) {
+        mainImg.style.cursor = 'zoom-in';
+        mainImg.title = 'Clique para ampliar';
+        mainImg.onclick = () => openZoomModal(mainImg.src);
+    }
+
+    if (imagesList.length <= 1) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
     imagesList.forEach((url, index) => {
         const thumb = document.createElement('img');
         thumb.src = url;
-        thumb.alt = `Foto ${index + 1}`;
-        thumb.style.cssText = 'width: 60px; height: 60px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid #ccc; transition: transform 0.2s, border-color 0.2s; flex-shrink: 0;';
-        
-        thumb.onmouseover = () => { 
-            thumb.style.borderColor = '#8B263E'; 
-            thumb.style.transform = 'scale(1.05)';
-        };
-        thumb.onmouseout = () => { 
-            thumb.style.borderColor = '#ccc'; 
-            thumb.style.transform = 'scale(1)';
-        };
+        thumb.className = index === 0 ? 'thumb-img active' : 'thumb-img';
 
+        // Ao clicar na miniatura, troca a imagem principal
         thumb.onclick = () => {
-            openZoomModal(url);
+            if (mainImg) mainImg.src = url;
+
+            document.querySelectorAll('#gallery-thumbs-list .thumb-img').forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
         };
 
         container.appendChild(thumb);
     });
 }
 
+// ==================== FUNÇÕES DE ZOOM ====================
+function openZoomModal(imageSrc) {
+    const zoomModal = document.getElementById('image-zoom-modal');
+    const zoomedImg = document.getElementById('zoomed-image');
+
+    if (zoomModal && zoomedImg) {
+        zoomedImg.src = imageSrc;
+        zoomModal.style.display = 'flex';
+        zoomModal.classList.add('active');
+    }
+}
+
+function closeZoomModal() {
+    const zoomModal = document.getElementById('image-zoom-modal');
+    if (zoomModal) {
+        zoomModal.style.display = 'none';
+        zoomModal.classList.remove('active');
+    }
+}
 function closeDescModal() {
     const modal = document.getElementById('desc-modal');
     if (modal) modal.classList.remove('active');

@@ -306,5 +306,12 @@ MODAL DE DES
     </div>
   </div>
 </div>
+
+<!-- MODAL DE ZOOM DA IMAGEM -->
+<div id="image-zoom-modal" class="modal-overlay" style="z-index: 3000; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onclick="closeZoomModal()">
+    <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2.5rem; font-weight: bold;">&times;</span>
+    <img id="zoomed-image" src="" alt="Imagem Ampliada" style="max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
+</div>
+
 </body>
 </html>
