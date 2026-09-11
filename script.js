@@ -285,35 +285,38 @@ function emptyState() {
 }
 
 // ==================== MODAL DE DESCRIÇÃO E GALERIA ====================
-// ==================== MODAL DE DESCRIÇÃO E GALERIA ====================
 function openDescModal(productId) {
+    // Busca o produto pelo ID (compatível com string e number)
     const product = products.find(p => String(p.id) === String(productId));
-    if (!product) return;
+    if (!product) {
+        console.error("Produto não encontrado:", productId);
+        return;
+    }
 
-    // A primeira foto é sempre a principal (product.image) e o resto são as secundárias
-    const mainImg = product.image;
+    // Pega a foto principal e as secundárias
+    const mainImg = product.image || '';
     const extraImgs = product.images || [];
-    currentModalImages = [mainImg, ...extraImgs].filter(Boolean);
+    const allImages = [mainImg, ...extraImgs].filter(Boolean);
 
-    // Atualiza a imagem principal em destaque
+    // 1. Imagem Principal
     const imgEl = document.getElementById('desc-modal-img');
     if (imgEl) imgEl.src = mainImg;
 
-    // Preenche títulos, preço e descrição
+    // 2. Preenche Texto, Preço e Categoria
     const titleEl = document.getElementById('desc-modal-title');
     const priceEl = document.getElementById('desc-modal-price');
     const descEl = document.getElementById('desc-modal-text');
     const categoryEl = document.getElementById('desc-modal-category');
 
-    if (categoryEl) categoryEl.textContent = product.type === 'vestido' ? 'VESTIDO' : 'TECIDO';
-    if (titleEl) titleEl.textContent = product.name;
-    if (priceEl) priceEl.textContent = `R$ ${Number(product.price).toFixed(2)}`;
-    if (descEl) descEl.textContent = product.desc || 'Nenhuma descrição ou medida informada para este produto.';
+    if (categoryEl) categoryEl.textContent = (product.type === 'vestido') ? 'VESTIDO' : 'TECIDO';
+    if (titleEl) titleEl.textContent = product.name || '';
+    if (priceEl) priceEl.textContent = `R$ ${Number(product.price || 0).toFixed(2)}`;
+    if (descEl) descEl.textContent = product.desc || 'Nenhuma descrição informada.';
 
-    // Renderiza a galeria de miniaturas (fotos principal + secundárias)
-    renderGalleryThumbs(currentModalImages);
+    // 3. Renderiza Galeria de Miniaturas
+    renderGalleryThumbs(allImages);
 
-    // Botão de compra no WhatsApp dentro da modal
+    // 4. Configura o botão de compra
     const buyBtn = document.getElementById('desc-modal-buy-btn');
     if (buyBtn) {
         buyBtn.onclick = () => {
@@ -322,8 +325,87 @@ function openDescModal(productId) {
         };
     }
 
+    // 5. Exibe a Modal
     const modal = document.getElementById('desc-modal');
     if (modal) modal.classList.add('active');
+}
+
+function renderGalleryThumbs(imagesList) {
+    const container = document.getElementById('gallery-thumbs-list');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Se só houver 1 foto, oculta a barra de miniaturas
+    if (imagesList.length <= 1) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
+    imagesList.forEach((url, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        thumb.className = (index === 0) ? 'thumb-img active' : 'thumb-img';
+
+        // Evento de clique na miniatura para trocar a foto principal
+        thumb.onclick = () => {
+            const mainImg = document.getElementById('desc-modal-img');
+            if (mainImg) mainImg.src = url;
+
+            document.querySelectorAll('#gallery-thumbs-list .thumb-img').forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
+        };
+
+        container.appendChild(thumb);
+    });
+}
+
+function closeDescModal() {
+    const modal = document.getElementById('desc-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+// Monta o carrossel de miniaturas
+function renderizarMiniaturas(imagesList) {
+    const container = document.getElementById('modal-miniaturas');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Se só existir 1 imagem no total, não é necessário exibir miniaturas
+    if (imagesList.length <= 1) {
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
+    imagesList.forEach((url, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = url;
+        thumb.alt = `Miniatura ${index + 1}`;
+        thumb.className = index === 0 ? 'thumb-img active' : 'thumb-img';
+
+        // Ao clicar em uma miniatura, altera a imagem principal em destaque
+        thumb.onclick = () => {
+            const mainImg = document.getElementById('modal-img-principal');
+            if (mainImg) mainImg.src = url;
+
+            // Altera visualmente qual miniatura está selecionada
+            document.querySelectorAll('#modal-miniaturas .thumb-img').forEach(img => img.classList.remove('active'));
+            thumb.classList.add('active');
+        };
+
+        container.appendChild(thumb);
+    });
+}
+
+// Fecha a modal de detalhes
+function fecharModal() {
+    const modal = document.getElementById('modal-descricao');
+    if (modal) modal.classList.remove('active');
 }
 
 function renderGalleryThumbs(imagesList) {

@@ -207,34 +207,34 @@
             </button>
         </div>
     </div>
-
+MODAL DE DES
     <!-- MODAL DE DESCRIÇÃO E GALERIA DE FOTOS -->
-<div id="modal-descricao" class="modal-overlay">
-  <div class="modal-card modal-large">
-    <button class="modal-close" onclick="fecharModal()">&times;</button>
+<div id="desc-modal" class="modal-overlay">
+  <div class="modal-container modal-large">
+    <button class="modal-close" onclick="closeDescModal()">&times;</button>
 
     <div class="modal-body-grid">
       <!-- Coluna da Esquerda: Fotos -->
       <div class="modal-gallery-side">
         <div class="main-image-container">
-          <img id="modal-img-principal" src="" alt="Imagem Principal">
+          <img id="desc-modal-img" src="" alt="Foto Principal">
         </div>
-        <!-- Lista de Miniaturas (Principal + Secundárias) -->
-        <div id="modal-miniaturas" class="thumbs-container"></div>
+        <!-- Miniaturas -->
+        <div id="gallery-thumbs-list" class="thumbs-container"></div>
       </div>
 
-      <!-- Coluna da Direita: Informações e Botão -->
+      <!-- Coluna da Direita: Informações -->
       <div class="modal-info-side">
-        <span id="modal-categoria" class="product-tag">VESTIDO</span>
-        <h2 id="modal-titulo" class="modal-title"></h2>
-        <div id="modal-preco" class="product-price-highlight"></div>
+        <span id="desc-modal-category" class="product-tag">VESTIDO</span>
+        <h2 id="desc-modal-title" class="modal-title"></h2>
+        <div id="desc-modal-price" class="product-price-highlight"></div>
 
         <div class="description-box">
           <h3><i class="fas fa-align-left"></i> Descrição & Medidas</h3>
-          <p id="modal-texto-descricao"></p>
+          <p id="desc-modal-text"></p>
         </div>
 
-        <button id="modal-btn-comprar" class="btn btn-whatsapp full-width">
+        <button id="desc-modal-buy-btn" class="btn btn-whatsapp full-width">
           <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
         </button>
       </div>
