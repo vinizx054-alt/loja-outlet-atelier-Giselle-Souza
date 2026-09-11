@@ -62,13 +62,15 @@
 
     <!-- MODAL DO PAINEL ADMIN -->
     <div id="admin-panel" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3><i class="fas fa-user-shield"></i> Painel Administrativo</h3>
-                <button class="close-btn" onclick="closeAdmin()" style="color: #ffffff !important; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); z-index: 10;">&times;</button>
+        <div class="modal-container" style="padding: 0; overflow: hidden; position: relative;">
+            
+            <!-- CABEÇALHO ESCURO -->
+            <div class="modal-header" style="position: relative; padding: 1.2rem 1.5rem; background: var(--dark); color: #ffffff;">
+                <h3 style="margin: 0; color: #ffffff;"><i class="fas fa-user-shield"></i> Painel Administrativo</h3>
+                <button class="close-btn" onclick="closeAdmin()" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #ffffff !important; background: transparent; border: none; font-size: 2rem; cursor: pointer; line-height: 1; z-index: 100;">&times;</button>
             </div>
             
-            <div class="modal-body">
+            <div class="modal-body" style="padding: 20px;">
                 <!-- LOGIN ADMIN -->
                 <div id="admin-login">
                     <p style="margin-bottom: 1rem; color: var(--gray);">Digite suas credenciais para gerenciar a loja:</p>
@@ -132,7 +134,7 @@
                             <!-- Pré-visualização da galeria -->
                             <div id="product-gallery-preview" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;"></div>
                         </div>
-                                                                    
+                                                                                    
                         <div class="form-group">
                             <label>Descrição</label>
                             <textarea id="product-desc" rows="3" placeholder="Detalhes do produto..."></textarea>
@@ -207,40 +209,40 @@
             </button>
         </div>
     </div>
-MODAL DE DES
+
     <!-- MODAL DE DESCRIÇÃO E GALERIA DE FOTOS -->
-<div id="desc-modal" class="modal-overlay">
-  <div class="modal-container modal-large">
-    <button class="modal-close" onclick="closeDescModal()">&times;</button>
+    <div id="desc-modal" class="modal-overlay">
+      <div class="modal-container modal-large">
+        <button class="modal-close" onclick="closeDescModal()">&times;</button>
 
-    <div class="modal-body-grid">
-      <!-- Coluna da Esquerda: Fotos -->
-      <div class="modal-gallery-side">
-        <div class="main-image-container">
-          <img id="desc-modal-img" src="" alt="Foto Principal">
+        <div class="modal-body-grid">
+          <!-- Coluna da Esquerda: Fotos -->
+          <div class="modal-gallery-side">
+            <div class="main-image-container">
+              <img id="desc-modal-img" src="" alt="Foto Principal">
+            </div>
+            <!-- Miniaturas -->
+            <div id="gallery-thumbs-list" class="thumbs-container"></div>
+          </div>
+
+          <!-- Coluna da Direita: Informações -->
+          <div class="modal-info-side">
+            <span id="desc-modal-category" class="product-tag">VESTIDO</span>
+            <h2 id="desc-modal-title" class="modal-title"></h2>
+            <div id="desc-modal-price" class="product-price-highlight"></div>
+
+            <div class="description-box">
+              <h3><i class="fas fa-align-left"></i> Descrição & Medidas</h3>
+              <p id="desc-modal-text"></p>
+            </div>
+
+            <button id="desc-modal-buy-btn" class="btn btn-whatsapp full-width">
+              <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
+            </button>
+          </div>
         </div>
-        <!-- Miniaturas -->
-        <div id="gallery-thumbs-list" class="thumbs-container"></div>
-      </div>
-
-      <!-- Coluna da Direita: Informações -->
-      <div class="modal-info-side">
-        <span id="desc-modal-category" class="product-tag">VESTIDO</span>
-        <h2 id="desc-modal-title" class="modal-title"></h2>
-        <div id="desc-modal-price" class="product-price-highlight"></div>
-
-        <div class="description-box">
-          <h3><i class="fas fa-align-left"></i> Descrição & Medidas</h3>
-          <p id="desc-modal-text"></p>
-        </div>
-
-        <button id="desc-modal-buy-btn" class="btn btn-whatsapp full-width">
-          <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
-        </button>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- MODAL DE CONFIRMAÇÃO DE COMPRA -->
     <div id="buy-modal" class="modal-overlay">
@@ -257,9 +259,9 @@ MODAL DE DES
     </div>
 
     <!-- MODAL DE ZOOM DE IMAGEM -->
-    <div id="image-zoom-modal" class="modal-overlay" style="z-index: 2000; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center;" onclick="closeZoomModal()">
-        <span style="position: absolute; top: 15px; right: 25px; color: #fff; font-size: 2rem; cursor: pointer; font-weight: bold;">&times;</span>
-        <img id="zoomed-image" src="" alt="Imagem Ampliada" style="max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
+    <div id="image-zoom-modal" class="modal-overlay" style="z-index: 3000; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onclick="closeZoomModal()">
+        <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2.5rem; font-weight: bold;">&times;</span>
+        <img id="zoomed-image" src="" alt="Imagem Ampliada" style="max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
     </div>
 
     <!-- TOAST -->
@@ -272,46 +274,6 @@ MODAL DE DES
 
     <!-- JAVASCRIPT PRINCIPAL -->
     <script src="script.js"></script>
-    <!-- Modal de Detalhes do Produto -->
-<div id="modal-descricao" class="modal-overlay">
-  <div class="modal-container">
-    <button class="modal-close" onclick="fecharModal()">&times;</button>
-    
-    <div class="modal-body">
-      <!-- Galeria de Fotos -->
-      <div class="modal-galeria">
-        <div class="foto-destaque">
-          <img id="modal-img-principal" src="" alt="Imagem Principal">
-        </div>
-        <div id="modal-miniaturas" class="miniaturas-list">
-          <!-- Miniaturas injetadas via JavaScript -->
-        </div>
-      </div>
-
-      <!-- Informações do Produto -->
-      <div class="modal-info">
-        <span id="modal-categoria" class="modal-tag">VESTIDO</span>
-        <h2 id="modal-titulo">Nome do Vestido</h2>
-        <p id="modal-preco" class="modal-preco">R$ 0,00</p>
-        
-        <div class="modal-descricao-box">
-          <h3>Descrição & Medidas</h3>
-          <p id="modal-texto-descricao"></p>
-        </div>
-
-        <a id="modal-btn-comprar" href="#" target="_blank" class="btn-comprar-modal">
-          <i class="fab fa-whatsapp"></i> Comprar pelo WhatsApp
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL DE ZOOM DA IMAGEM -->
-<div id="image-zoom-modal" class="modal-overlay" style="z-index: 3000; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" onclick="closeZoomModal()">
-    <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2.5rem; font-weight: bold;">&times;</span>
-    <img id="zoomed-image" src="" alt="Imagem Ampliada" style="max-width: 90%; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
-</div>
 
 </body>
 </html>
